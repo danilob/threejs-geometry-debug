@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
+import gsap from 'gsap'
 import {Pane} from 'tweakpane';
 
 const pane = new Pane();
@@ -28,7 +28,13 @@ const material = new THREE.MeshBasicMaterial({
 // Create an empty BufferGeometry
 const geometry = new THREE.BoxGeometry(1,1,1)
 
-
+const PARAMS = {
+    color: '#ff0000',
+    spin: () => {
+        gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 })
+    }
+  };
+  
 
 
 // Object
@@ -46,6 +52,7 @@ const folderPositionMesh = folderMesh.addFolder({
     title: 'position',
     expand: true,
 })
+
 
 
 folderPositionMesh.addInput(mesh.position, "x", {
@@ -107,6 +114,17 @@ meshRotY.on('change', function(ev) {
     mesh.rotation.y = ev.value * Math.PI/180
 });
 
+folderMesh.addInput(mesh.material, "wireframe")
+folderMesh.addInput(mesh, "visible")
+folderMesh.addInput(PARAMS, "color").on("change",(e)=>{
+    material.color.set(new THREE.Color(e.value))
+})
+
+folderMesh.addButton({
+    title: 'spin'
+}).on("click",PARAMS.spin)
+
+
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,0.1,100)
 // camera.position.x = 2
@@ -133,6 +151,9 @@ let darkMode = true
 
 window.addEventListener('keypress',(event)=>{
     if(event.code == 'KeyR'){
+        mesh.position.set(0,0,0)
+        mesh.rotation.set(0,0,0)
+        pane.refresh()
         camera.position.set(0,0,5)
         controls.target.set(0,0,0)
     }
