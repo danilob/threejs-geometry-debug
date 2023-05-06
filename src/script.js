@@ -1,6 +1,9 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import gsap from 'gsap'
+import {Pane} from 'tweakpane';
+const pane = new Pane();
+
 
 /**
  * Base
@@ -22,8 +25,99 @@ const material = new THREE.MeshBasicMaterial({ color: 0xff0000})
 const mesh = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
     material
+    
 )
+//PASTAS
+
+
 scene.add(mesh)
+
+
+const folderMesh = pane.addFolder({
+    title: 'Mesh'
+})
+
+
+const folderPositionMesh = folderMesh.addFolder({
+    title: 'position',
+    expand: true,
+})
+
+
+folderPositionMesh.addInput(mesh.position, "x", {
+    label: "x",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+folderPositionMesh.addInput(mesh.position, "y", {
+    label: "y",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+folderPositionMesh.addInput(mesh.position, "z", {
+    label: "z",
+    min: -20,
+    max: 20,
+    step: 0.1
+});
+
+
+
+
+
+
+const folder2 = folderMesh.addFolder({
+    title: 'rotation',
+    expand: true,
+})
+
+
+folder2.addInput(mesh.rotation, "x", {
+    label: "r1",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+folder2.addInput(mesh.rotation, "y", {
+    label: "r2",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+folder2.addInput(mesh.rotation, "z", {
+    label: "r3",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+
+
+folderMesh.addInput(mesh.material, "wireframe")
+folderMesh.addInput(mesh, "visible")
+
+const PARAMS = {
+    color: '#ff0000',
+    spin: () => {
+        gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 })
+    }
+  };
+  folderMesh.addButton({
+    title: 'spin'
+}).on("click",PARAMS.spin)
+
+  folderMesh.addInput(PARAMS, "color").on("change",(e)=>{
+    material.color.set(new THREE.Color(e.value))
+    
+})
+
+
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,0.1,100)
