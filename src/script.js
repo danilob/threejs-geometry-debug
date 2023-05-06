@@ -17,23 +17,29 @@ const scene = new THREE.Scene()
 
 const material = new THREE.MeshBasicMaterial({ 
     color: 0xff0000,
+    //side: THREE.BackSide|THREE.FrontSide|THREE.DoubleSide
     wireframe: true,
 })
 
 // Create an empty BufferGeometry
 const geometry = new THREE.BufferGeometry()
+// Define the position attribute
+const vertices = [
+    0, 0, 0,
+    1, 0, 0,
+    1, 1, 0,
+    0, 1, 0,
+    ];
+const positionAttribute = new THREE.Float32BufferAttribute(vertices, 3);
+geometry.setAttribute('position', positionAttribute);
 
-// Create 50 triangles (450 values)
-const count = 50
-const positionsArray = new Float32Array(count * 3 * 3)
-for(let i = 0; i < count * 3 * 3; i++)
-{
-    positionsArray[i] = (Math.random() - 0.5) * 4
-}
-
-// Create the attribute and name it 'position'
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
-geometry.setAttribute('position', positionsAttribute)
+// Define the index attribute
+const indices = [
+    0, 1, 2,
+    2, 3, 0,
+    ];
+const indexAttribute = new THREE.Uint16BufferAttribute(indices, 1);
+geometry.setIndex(indexAttribute);
 
 
 // Object
