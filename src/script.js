@@ -1,5 +1,11 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
+import {Pane} from 'tweakpane';
+
+const pane = new Pane();
+
+
 /**
  * Base
  */
@@ -23,12 +29,45 @@ const material = new THREE.MeshBasicMaterial({
 const geometry = new THREE.BoxGeometry(1,1,1)
 
 
+
+
 // Object
 const mesh = new THREE.Mesh(
     geometry,
     material
 )
 scene.add(mesh)
+
+const folderMesh = pane.addFolder({
+    title: 'Mesh'
+})
+
+const folderPositionMesh = folderMesh.addFolder({
+    title: 'position',
+    expand: true,
+})
+
+
+folderPositionMesh.addInput(mesh.position, "x", {
+    label: "x",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+folderPositionMesh.addInput(mesh.position, "y", {
+    label: "y",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
+
+folderPositionMesh.addInput(mesh.position, "z", {
+    label: "z",
+    min: -20,
+    max: 20,
+    step: 0.1
+})
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,0.1,100)
