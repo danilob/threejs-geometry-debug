@@ -69,6 +69,44 @@ folderPositionMesh.addInput(mesh.position, "z", {
     step: 0.1
 })
 
+const folderRotationMesh = folderMesh.addFolder({
+    title: 'rotation',
+    expand: true,
+})
+
+const meshRotX = folderRotationMesh.addInput(mesh.rotation, "x", {
+    label: "axis x",
+    min: -180,
+    max: 180,
+    step: 1
+})
+
+const meshRotY = folderRotationMesh.addInput(mesh.rotation, "y", {
+    label: "axis y",
+    min: -180,
+    max: 180,
+    step: 1
+})
+
+const meshRotZ = folderRotationMesh.addInput(mesh.rotation, "z", {
+    label: "axis z",
+    min: -180,
+    max: 180,
+    step: 1
+})
+
+meshRotZ.on('change', function(ev) {
+    mesh.rotation.z = ev.value * Math.PI/180
+  });
+
+meshRotX.on('change', function(ev) {
+    mesh.rotation.x = ev.value * Math.PI/180
+});
+
+meshRotY.on('change', function(ev) {
+    mesh.rotation.y = ev.value * Math.PI/180
+});
+
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height,0.1,100)
 // camera.position.x = 2
